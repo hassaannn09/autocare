@@ -159,8 +159,6 @@ export default function AdminDashboard() {
         }
     }, [token]);
 
-    useEffect(() => { fetchData(); }, [fetchData]);
-
     return (
         <div style={styles.container}>
             <div style={styles.sidebar}>
