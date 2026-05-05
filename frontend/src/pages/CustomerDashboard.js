@@ -11,7 +11,7 @@ export default function CustomerDashboard() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get('http://localhost:5000/api/services')
+        axios.get('autocare-backend5626.up.railway.app/api/services')
             .then(res => setServices(res.data))
             .catch(err => console.log(err));
     }, []);

@@ -16,7 +16,7 @@ export default function MechanicDashboard() {
     const [activeTab, setActiveTab] = useState('all');
 
     useEffect(() => {
-        axios.get('http://localhost:5000/api/appointments/assigned', {
+        axios.get('autocare-backend5626.up.railway.app/api/appointments/assigned', {
             headers: { Authorization: `Bearer ${token}` }
         }).then(res => {
             setAppointments(res.data);
@@ -32,7 +32,7 @@ export default function MechanicDashboard() {
     const handleStatusUpdate = async (id, status) => {
         try {
             await axios.put(
-                `http://localhost:5000/api/appointments/job-status/${id}`,
+                `autocare-backend5626.up.railway.app/api/appointments/job-status/${id}`,
                 { status },
                 { headers: { Authorization: `Bearer ${token}` } }
             );

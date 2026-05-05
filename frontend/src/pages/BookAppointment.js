@@ -30,7 +30,7 @@ export default function BookAppointment() {
     ];
 
     useEffect(() => {
-        axios.get('http://localhost:5000/api/services')
+        axios.get('autocare-backend5626.up.railway.app/api/services')
             .then(res => setServices(res.data))
             .catch(err => console.log(err));
     }, []);
@@ -41,7 +41,7 @@ export default function BookAppointment() {
         setError('');
         try {
             const res = await axios.post(
-                'http://localhost:5000/api/appointments',
+                'autocare-backend5626.up.railway.app/api/appointments',
                 {
                     serviceId: form.serviceId,
                     date: form.date,

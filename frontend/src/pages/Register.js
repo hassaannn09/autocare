@@ -17,7 +17,7 @@ export default function Register() {
         setError('');
         setSuccess('');
         try {
-            const res = await axios.post('http://localhost:5000/api/auth/register', form);
+            const res = await axios.post('autocare-backend5626.up.railway.app/api/auth/register', form);
             if (form.role === 'customer') {
                 navigate('/login');
             } else {

@@ -12,7 +12,7 @@ export default function ServiceHistory() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        axios.get('http://localhost:5000/api/appointments/my', {
+        axios.get('autocare-backend5626.up.railway.app/api/appointments/my', {
             headers: { Authorization: `Bearer ${token}` }
         }).then(res => {
             setAppointments(res.data);
