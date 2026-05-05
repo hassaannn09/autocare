@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import { GiLightningSpanner } from 'react-icons/gi';
-import { LuLayoutDashboard, LuCalendarDays, LuHistory, LuLogOut, LuArrowLeft, LuCar, LuClock, LuBanknote } from 'react-icons/lu';
+import { LuLayoutDashboard, LuCalendarDays, LuHistory, LuLogOut, LuArrowLeft, LuCar, LuClock } from 'react-icons/lu';
 
 export default function BookAppointment() {
     const { token, logout } = useAuth();

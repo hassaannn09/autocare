@@ -8,6 +8,7 @@ import {
     LuPlus, LuPencil, LuTrash2, LuUserCheck, LuCircleCheck,
     LuCircleX, LuTrendingUp, LuClock
 } from 'react-icons/lu';
+import React, { useEffect, useState, useCallback } from 'react';
 
 export default function AdminDashboard() {
     const { token, logout } = useAuth();
@@ -133,6 +134,32 @@ export default function AdminDashboard() {
         { id: 'services', icon: <LuWrench size={17} />, label: 'Services' },
         { id: 'users', icon: <LuUserCheck size={17} />, label: `Approvals ${pendingUsers.length > 0 ? `(${pendingUsers.length})` : ''}` },
     ];
+
+
+    const fetchData = useCallback(async () => {
+        try {
+            const [apptRes, svcRes, mechRes, pendingRes] = await Promise.all([
+                axios.get('http://autocare-backend5626.up.railway.app/api/appointments/all', {
+                    headers: { Authorization: `Bearer ${token}` }
+                }),
+                axios.get('http://autocare-backend5626.up.railway.app/api/services'),
+                axios.get('http://autocare-backend5626.up.railway.app/api/users/mechanics', {
+                    headers: { Authorization: `Bearer ${token}` }
+                }),
+                axios.get('http://autocare-backend5626.up.railway.app/api/users/pending', {
+                    headers: { Authorization: `Bearer ${token}` }
+                }),
+            ]);
+            setAppointments(apptRes.data);
+            setServices(svcRes.data);
+            setMechanics(mechRes.data);
+            setPendingUsers(pendingRes.data);
+        } catch (err) {
+            console.log(err);
+        }
+    }, [token]);
+
+    useEffect(() => { fetchData(); }, [fetchData]);
 
     return (
         <div style={styles.container}>
