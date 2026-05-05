@@ -44,8 +44,6 @@ export default function MechanicDashboard() {
         }
     };
 
-    const handleLogout2 = () => { logout(); navigate('/login'); };
-
     const filtered = activeTab === 'all'
         ? appointments
         : appointments.filter(a => a.status === activeTab);

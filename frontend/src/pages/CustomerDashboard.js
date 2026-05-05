@@ -6,7 +6,7 @@ import { GiLightningSpanner } from 'react-icons/gi';
 import { LuLayoutDashboard, LuCalendarDays, LuHistory, LuLogOut, LuCar, LuClock, LuBanknote } from 'react-icons/lu';
 
 export default function CustomerDashboard() {
-    const { user, token, logout } = useAuth();
+    const { user, logout } = useAuth();
     const [services, setServices] = useState([]);
     const navigate = useNavigate();
 

@@ -23,7 +23,7 @@ export default function AdminDashboard() {
     const [form, setForm] = useState({ name: '', description: '', price: '', duration: '' });
     const [error, setError] = useState('');
 
-    useEffect(() => { fetchData(); }, []);
+    useEffect(() => { fetchData(); }, [token]);
 
     const fetchData = async () => {
         try {
