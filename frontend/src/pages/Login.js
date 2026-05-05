@@ -17,7 +17,7 @@ export default function Login() {
         setLoading(true);
         setError('');
         try {
-            const res = await axios.post('autocare-backend5626.up.railway.app/api/auth/login', form);
+            const res = await axios.post('https://https://autocare-backend5626.up.railway.app/api/auth/login', form);
             login(res.data.user, res.data.token);
             if (res.data.user.role === 'admin') navigate('/admin');
             else if (res.data.user.role === 'mechanic') navigate('/mechanic');

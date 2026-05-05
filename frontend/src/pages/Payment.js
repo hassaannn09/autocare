@@ -17,7 +17,7 @@ export default function Payment() {
     const [error, setError] = useState('');
 
     useEffect(() => {
-        axios.get('autocare-backend5626.up.railway.app/api/appointments/my', {
+        axios.get('https://autocare-backend5626.up.railway.app/api/appointments/my', {
             headers: { Authorization: `Bearer ${token}` }
         }).then(res => {
             const found = res.data.find(a => a._id === id);
@@ -30,7 +30,7 @@ export default function Payment() {
         setError('');
         try {
             await axios.put(
-                `autocare-backend5626.up.railway.app/api/appointments/pay/${id}`,
+                `https://autocare-backend5626.up.railway.app/api/appointments/pay/${id}`,
                 {},
                 { headers: { Authorization: `Bearer ${token}` } }
             );
