@@ -9,8 +9,6 @@ import {
     LuCircleX, LuTrendingUp, LuClock
 } from 'react-icons/lu';
 
-const API = 'https://practical-amazement-production-6627.up.railway.app';
-
 export default function AdminDashboard() {
     const { token, logout } = useAuth();
     const navigate = useNavigate();
