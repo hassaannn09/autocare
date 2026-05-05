@@ -28,10 +28,10 @@ export default function AdminDashboard() {
     const fetchData = useCallback(async () => {
         try {
             const [apptRes, svcRes, mechRes, pendingRes] = await Promise.all([
-                axios.get(`${API}/api/appointments/all`, { headers: { Authorization: `Bearer ${token}` } }),
-                axios.get(`${API}/api/services`),
-                axios.get(`${API}/api/users/mechanics`, { headers: { Authorization: `Bearer ${token}` } }),
-                axios.get(`${API}/api/users/pending`, { headers: { Authorization: `Bearer ${token}` } }),
+                axios.get(`https://autocare-backend5626.up.railway.app/api/appointments/all`, { headers: { Authorization: `Bearer ${token}` } }),
+                axios.get(`https://autocare-backend5626.up.railway.app/api/services`),
+                axios.get(`https://autocare-backend5626.up.railway.app/api/users/mechanics`, { headers: { Authorization: `Bearer ${token}` } }),
+                axios.get(`https://autocare-backend5626.up.railway.app/api/users/pending`, { headers: { Authorization: `Bearer ${token}` } }),
             ]);
             setAppointments(apptRes.data);
             setServices(svcRes.data);
@@ -51,11 +51,11 @@ export default function AdminDashboard() {
         setError('');
         try {
             if (editingService) {
-                await axios.put(`${API}/api/services/${editingService._id}`, form, {
+                await axios.put(`https://autocare-backend5626.up.railway.app/api/services/${editingService._id}`, form, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
             } else {
-                await axios.post(`${API}/api/services`, form, {
+                await axios.post(`https://autocare-backend5626.up.railway.app/api/services`, form, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
             }
@@ -71,7 +71,7 @@ export default function AdminDashboard() {
     const handleDelete = async (id) => {
         if (!window.confirm('Delete this service?')) return;
         try {
-            await axios.delete(`${API}/api/services/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+            await axios.delete(`https://autocare-backend5626.up.railway.app/api/services/${id}`, { headers: { Authorization: `Bearer ${token}` } });
             fetchData();
         } catch (err) { console.log(err); }
     };
@@ -85,21 +85,21 @@ export default function AdminDashboard() {
 
     const handleStatusChange = async (id, status) => {
         try {
-            await axios.put(`${API}/api/appointments/status/${id}`, { status }, { headers: { Authorization: `Bearer ${token}` } });
+            await axios.put(`https://autocare-backend5626.up.railway.app/api/appointments/status/${id}`, { status }, { headers: { Authorization: `Bearer ${token}` } });
             fetchData();
         } catch (err) { console.log(err); }
     };
 
     const handleAssignMechanic = async (appointmentId, mechanicId) => {
         try {
-            await axios.put(`${API}/api/appointments/assign/${appointmentId}`, { mechanicId }, { headers: { Authorization: `Bearer ${token}` } });
+            await axios.put(`https://autocare-backend5626.up.railway.app/api/appointments/assign/${appointmentId}`, { mechanicId }, { headers: { Authorization: `Bearer ${token}` } });
             fetchData();
         } catch (err) { console.log(err); }
     };
 
     const handleUserStatus = async (userId, status) => {
         try {
-            await axios.put(`${API}/api/users/${userId}/status`, { status }, { headers: { Authorization: `Bearer ${token}` } });
+            await axios.put(`https://autocare-backend5626.up.railway.app/api/users/${userId}/status`, { status }, { headers: { Authorization: `Bearer ${token}` } });
             fetchData();
         } catch (err) { console.log(err); }
     };
