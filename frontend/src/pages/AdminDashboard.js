@@ -9,6 +9,7 @@ import {
     LuCircleX, LuTrendingUp, LuClock
 } from 'react-icons/lu';
 
+const API = 'https://practical-amazement-production-6627.up.railway.app';
 
 export default function AdminDashboard() {
     const { token, logout } = useAuth();
@@ -24,21 +25,13 @@ export default function AdminDashboard() {
     const [form, setForm] = useState({ name: '', description: '', price: '', duration: '' });
     const [error, setError] = useState('');
 
-    useEffect(() => { fetchData(); }, [token]);
-
-    const fetchData = async () => {
+    const fetchData = useCallback(async () => {
         try {
             const [apptRes, svcRes, mechRes, pendingRes] = await Promise.all([
-                axios.get('autocare-backend5626.up.railway.app/api/appointments/all', {
-                    headers: { Authorization: `Bearer ${token}` }
-                }),
-                axios.get('autocare-backend5626.up.railway.app/api/services'),
-                axios.get('autocare-backend5626.up.railway.app/api/users/mechanics', {
-                    headers: { Authorization: `Bearer ${token}` }
-                }),
-                axios.get('autocare-backend5626.up.railway.app/api/users/pending', {
-                    headers: { Authorization: `Bearer ${token}` }
-                }),
+                axios.get(`${API}/api/appointments/all`, { headers: { Authorization: `Bearer ${token}` } }),
+                axios.get(`${API}/api/services`),
+                axios.get(`${API}/api/users/mechanics`, { headers: { Authorization: `Bearer ${token}` } }),
+                axios.get(`${API}/api/users/pending`, { headers: { Authorization: `Bearer ${token}` } }),
             ]);
             setAppointments(apptRes.data);
             setServices(svcRes.data);
@@ -47,7 +40,9 @@ export default function AdminDashboard() {
         } catch (err) {
             console.log(err);
         }
-    };
+    }, [token]);
+
+    useEffect(() => { fetchData(); }, [fetchData]);
 
     const handleLogout = () => { logout(); navigate('/login'); };
 
@@ -56,11 +51,11 @@ export default function AdminDashboard() {
         setError('');
         try {
             if (editingService) {
-                await axios.put(`autocare-backend5626.up.railway.app/api/services/${editingService._id}`, form, {
+                await axios.put(`${API}/api/services/${editingService._id}`, form, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
             } else {
-                await axios.post('autocare-backend5626.up.railway.app/api/services', form, {
+                await axios.post(`${API}/api/services`, form, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
             }
@@ -76,9 +71,7 @@ export default function AdminDashboard() {
     const handleDelete = async (id) => {
         if (!window.confirm('Delete this service?')) return;
         try {
-            await axios.delete(`autocare-backend5626.up.railway.app/api/services/${id}`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            await axios.delete(`${API}/api/services/${id}`, { headers: { Authorization: `Bearer ${token}` } });
             fetchData();
         } catch (err) { console.log(err); }
     };
@@ -92,27 +85,21 @@ export default function AdminDashboard() {
 
     const handleStatusChange = async (id, status) => {
         try {
-            await axios.put(`autocare-backend5626.up.railway.app/api/appointments/status/${id}`, { status }, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            await axios.put(`${API}/api/appointments/status/${id}`, { status }, { headers: { Authorization: `Bearer ${token}` } });
             fetchData();
         } catch (err) { console.log(err); }
     };
 
     const handleAssignMechanic = async (appointmentId, mechanicId) => {
         try {
-            await axios.put(`autocare-backend5626.up.railway.app/api/appointments/assign/${appointmentId}`, { mechanicId }, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            await axios.put(`${API}/api/appointments/assign/${appointmentId}`, { mechanicId }, { headers: { Authorization: `Bearer ${token}` } });
             fetchData();
         } catch (err) { console.log(err); }
     };
 
     const handleUserStatus = async (userId, status) => {
         try {
-            await axios.put(`autocare-backend5626.up.railway.app/api/users/${userId}/status`, { status }, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            await axios.put(`${API}/api/users/${userId}/status`, { status }, { headers: { Authorization: `Bearer ${token}` } });
             fetchData();
         } catch (err) { console.log(err); }
     };
@@ -135,45 +122,19 @@ export default function AdminDashboard() {
         { id: 'users', icon: <LuUserCheck size={17} />, label: `Approvals ${pendingUsers.length > 0 ? `(${pendingUsers.length})` : ''}` },
     ];
 
-
-    const fetchData = useCallback(async () => {
-        try {
-            const [apptRes, svcRes, mechRes, pendingRes] = await Promise.all([
-                axios.get('http://autocare-backend5626.up.railway.app/api/appointments/all', {
-                    headers: { Authorization: `Bearer ${token}` }
-                }),
-                axios.get('http://autocare-backend5626.up.railway.app/api/services'),
-                axios.get('http://autocare-backend5626.up.railway.app/api/users/mechanics', {
-                    headers: { Authorization: `Bearer ${token}` }
-                }),
-                axios.get('http://autocare-backend5626.up.railway.app/api/users/pending', {
-                    headers: { Authorization: `Bearer ${token}` }
-                }),
-            ]);
-            setAppointments(apptRes.data);
-            setServices(svcRes.data);
-            setMechanics(mechRes.data);
-            setPendingUsers(pendingRes.data);
-        } catch (err) {
-            console.log(err);
-        }
-    }, [token]);
-
     return (
         <div style={styles.container}>
             <div style={styles.sidebar}>
                 <div style={styles.sidebarLogo}>
-                    <GiLightningSpanner size={36} color="#dc2626" />
+                    <GiLightningSpanner size={22} color="#dc2626" />
                     <span>AutoCare</span>
                 </div>
                 <div style={styles.adminBadge}>Admin Panel</div>
                 <nav style={styles.nav}>
                     {navItems.map(item => (
-                        <div
-                            key={item.id}
+                        <div key={item.id}
                             style={activeTab === item.id ? styles.navItemActive : styles.navItem}
-                            onClick={() => setActiveTab(item.id)}
-                        >
+                            onClick={() => setActiveTab(item.id)}>
                             {item.icon} {item.label}
                         </div>
                     ))}
@@ -184,8 +145,6 @@ export default function AdminDashboard() {
             </div>
 
             <div style={styles.main}>
-
-                {/* OVERVIEW */}
                 {activeTab === 'overview' && (
                     <>
                         <h1 style={styles.heading}>Dashboard Overview</h1>
@@ -205,7 +164,6 @@ export default function AdminDashboard() {
                                 </div>
                             ))}
                         </div>
-
                         <h2 style={styles.sectionTitle}>Recent Appointments</h2>
                         <div style={styles.tableWrap}>
                             <table style={styles.table}>
@@ -232,7 +190,6 @@ export default function AdminDashboard() {
                     </>
                 )}
 
-                {/* APPOINTMENTS */}
                 {activeTab === 'appointments' && (
                     <>
                         <h1 style={styles.heading}>All Appointments</h1>
@@ -266,11 +223,9 @@ export default function AdminDashboard() {
                                                 }}>{appt.paymentStatus}</span>
                                             </td>
                                             <td style={styles.td}>
-                                                <select
-                                                    style={styles.selectSm}
+                                                <select style={styles.selectSm}
                                                     value={appt.mechanic?._id || ''}
-                                                    onChange={e => handleAssignMechanic(appt._id, e.target.value)}
-                                                >
+                                                    onChange={e => handleAssignMechanic(appt._id, e.target.value)}>
                                                     <option value="">Unassigned</option>
                                                     {mechanics.map(m => (
                                                         <option key={m._id} value={m._id}>{m.name}</option>
@@ -278,11 +233,9 @@ export default function AdminDashboard() {
                                                 </select>
                                             </td>
                                             <td style={styles.td}>
-                                                <select
-                                                    style={styles.selectSm}
+                                                <select style={styles.selectSm}
                                                     value={appt.status}
-                                                    onChange={e => handleStatusChange(appt._id, e.target.value)}
-                                                >
+                                                    onChange={e => handleStatusChange(appt._id, e.target.value)}>
                                                     {['pending', 'confirmed', 'completed', 'cancelled'].map(s => (
                                                         <option key={s} value={s}>{s}</option>
                                                     ))}
@@ -296,7 +249,6 @@ export default function AdminDashboard() {
                     </>
                 )}
 
-                {/* SERVICES */}
                 {activeTab === 'services' && (
                     <>
                         <div style={styles.tabHeader}>
@@ -309,7 +261,6 @@ export default function AdminDashboard() {
                                 <LuPlus size={14} /> Add Service
                             </button>
                         </div>
-
                         {showForm && (
                             <div style={styles.formCard}>
                                 <h3 style={styles.formTitle}>{editingService ? 'Edit Service' : 'New Service'}</h3>
@@ -353,7 +304,6 @@ export default function AdminDashboard() {
                                 </form>
                             </div>
                         )}
-
                         <div style={styles.serviceGrid}>
                             {services.map(service => (
                                 <div key={service._id} style={styles.serviceCard}>
@@ -379,7 +329,6 @@ export default function AdminDashboard() {
                     </>
                 )}
 
-                {/* USER APPROVALS */}
                 {activeTab === 'users' && (
                     <>
                         <h1 style={styles.heading}>Pending Approvals</h1>
