@@ -6,10 +6,23 @@
   box-sizing: border-box;
 }
 
+html {
+  font-size: 16px; /* base font size */
+}
+
 body {
   font-family: "Poppins", sans-serif;
   background-color: #f9fafb;
   color: #111827;
+  min-height: 100vh;
+  overflow-x: hidden; /* prevents horizontal scroll on mobile */
+}
+
+/* Responsive font scaling */
+@media (max-width: 768px) {
+  html {
+    font-size: 14px; /* slightly smaller text on phones */
+  }
 }
 
 ::-webkit-scrollbar {
@@ -28,10 +41,13 @@ body {
 button {
   cursor: pointer;
   font-family: "Poppins", sans-serif;
+  touch-action: manipulation;
 }
 
 input,
 select,
 textarea {
   font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  max-width: 100%;
 }
