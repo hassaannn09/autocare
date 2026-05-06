@@ -6,6 +6,7 @@ import { LuTriangleAlert, LuCircleCheck } from 'react-icons/lu';
 
 export default function Register() {
     const [form, setForm] = useState({ name: '', email: '', password: '', role: 'customer', inviteCode: '' });
+    const [pwdFocus, setPwdFocus] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [loading, setLoading] = useState(false);
@@ -83,8 +84,28 @@ export default function Register() {
                                 placeholder="••••••••"
                                 value={form.password}
                                 onChange={e => setForm({ ...form, password: e.target.value })}
+                                onFocus={() => setPwdFocus(true)}
                                 required
                             />
+                            {pwdFocus && (
+                                <div style={styles.rulesBox}>
+                                    {[
+                                        { label: 'At least 8 characters', pass: form.password.length >= 8 },
+                                        { label: 'One uppercase letter', pass: /[A-Z]/.test(form.password) },
+                                        { label: 'One number', pass: /[0-9]/.test(form.password) },
+                                        { label: 'One special character (!@#$%)', pass: /[!@#$%]/.test(form.password) },
+                                    ].map((rule, i) => (
+                                        <div key={i} style={styles.ruleRow}>
+                                            <span style={{ color: rule.pass ? '#16a34a' : '#94a3b8', fontSize: '16px' }}>
+                                                {rule.pass ? '✓' : '○'}
+                                            </span>
+                                            <span style={{ ...styles.ruleText, color: rule.pass ? '#16a34a' : '#94a3b8' }}>
+                                                {rule.label}
+                                            </span>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                         <div style={styles.field}>
                             <label style={styles.label}>Account Type</label>
@@ -193,6 +214,16 @@ const styles = {
         color: '#fff', border: 'none', borderRadius: '8px',
         fontSize: '15px', fontWeight: '600', marginTop: '4px',
     },
+    rulesBox: {
+        marginTop: '8px', padding: '12px 14px',
+        background: '#f8fafc', borderRadius: '8px',
+        border: '1px solid #e2e8f0',
+    },
+    ruleRow: {
+        display: 'flex', alignItems: 'center',
+        gap: '8px', marginBottom: '4px',
+    },
+    ruleText: { fontSize: '12px', fontWeight: '500' },
     link: { textAlign: 'center', marginTop: '20px', fontSize: '14px', color: '#64748b' },
     linkText: { color: '#dc2626', fontWeight: '600', textDecoration: 'none' },
 };
