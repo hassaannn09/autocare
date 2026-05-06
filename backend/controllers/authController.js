@@ -2,10 +2,25 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+const validatePassword = (password) => {
+    const rules = [
+        { test: password.length >= 8, msg: 'At least 8 characters' },
+        { test: /[A-Z]/.test(password), msg: 'At least one uppercase letter' },
+        { test: /[0-9]/.test(password), msg: 'At least one number' },
+        { test: /[!@#$%]/.test(password), msg: 'At least one special character (!@#$%)' },
+    ];
+    const failed = rules.filter(r => !r.test);
+    return failed.length > 0 ? failed.map(r => r.msg) : null;
+};
+
 exports.register = async (req, res) => {
     try {
         const { name, email, password, role, inviteCode } = req.body;
 
+        const passwordErrors = validatePassword(password);
+        if (passwordErrors) {
+            return res.status(400).json({ message: `Weak password: ${passwordErrors.join(', ')}` });
+        }
         const existing = await User.findOne({ email });
         if (existing) return res.status(400).json({ message: 'Email already registered' });
 
@@ -27,6 +42,8 @@ exports.register = async (req, res) => {
             return res.status(201).json({
                 message: 'Registration successful. Your account is pending admin approval.'
             });
+
+
         }
 
         const token = jwt.sign(

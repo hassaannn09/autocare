@@ -6,6 +6,7 @@ import { LuTriangleAlert, LuCircleCheck } from 'react-icons/lu';
 
 export default function Register() {
     const [form, setForm] = useState({ name: '', email: '', password: '', role: 'customer', inviteCode: '' });
+    const [pwdFocus, setPwdFocus] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [loading, setLoading] = useState(false);
