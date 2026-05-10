@@ -10,7 +10,7 @@ import {
 } from 'react-icons/lu';
 
 export default function AdminDashboard() {
-    const { token, logout } = useAuth();
+    const { user, token, logout } = useAuth();
     const navigate = useNavigate();
 
     const [appointments, setAppointments] = useState([]);
@@ -128,6 +128,14 @@ export default function AdminDashboard() {
                     <span>AutoCare</span>
                 </div>
                 <div style={styles.adminBadge}>Admin Panel</div>
+                <div style={styles.userInfo}>
+                    <div style={styles.avatar}>{user?.name?.charAt(0).toUpperCase()}</div>
+                    <div>
+                        <p style={styles.userName}>{user?.name}</p>
+                        <p style={styles.userRole}>{user?.role}</p>
+                    </div>
+                </div>
+
                 <nav style={styles.nav}>
                     {navItems.map(item => (
                         <div key={item.id}
@@ -392,8 +400,24 @@ const styles = {
         display: 'flex', alignItems: 'center', gap: '10px',
         padding: '22px 20px 14px', fontSize: '18px', fontWeight: '700', color: '#fff',
     },
+    // ✅ FIXED: was missing
+    userInfo: {
+        display: 'flex', alignItems: 'center', gap: '10px',
+        padding: '14px 20px', borderBottom: '1px solid #1e293b',
+    },
+    // ✅ FIXED: was missing
+    avatar: {
+        width: '36px', height: '36px', borderRadius: '50%',
+        background: '#dc2626', color: '#fff',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        fontSize: '15px', fontWeight: '700', flexShrink: 0,
+    },
+    // ✅ FIXED: was missing
+    userName: { fontSize: '13px', fontWeight: '600', color: '#fff', marginBottom: '2px' },
+    // ✅ FIXED: was missing
+    userRole: { fontSize: '11px', color: '#94a3b8', textTransform: 'capitalize' },
     adminBadge: {
-        margin: '0 20px 8px', fontSize: '11px', padding: '4px 10px',
+        margin: '12px 20px 8px', fontSize: '11px', padding: '4px 10px',
         background: '#dc2626', color: '#fff', borderRadius: '6px',
         fontWeight: '600', textAlign: 'center', letterSpacing: '0.05em',
     },
